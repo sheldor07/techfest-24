@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,  // Keeps TypeScript from emitting files, change to false if you want JS output
+    "jsx": "react-jsx",
+
+    /* Linting - Make less strict */
+    "strict": false,  // Disables all strict type-checking options
+    "noImplicitAny": false,  // Allows expressions and declarations with an implied 'any' type
+    "noImplicitThis": false,  // Allow 'this' expressions with an implied 'any' type
+    "alwaysStrict": false,  // Parses all code in strict mode but doesn't enforce it
+    "strictNullChecks": false,  // When type checking, take into account 'null' and 'undefined'
+    "strictFunctionTypes": false,  // Disable strict checking of function types
+    "strictBindCallApply": false,  // Allow incorrect arguments in functions
+    "strictPropertyInitialization": false,  // Do not enforce class property initialization
+
+    "noUnusedLocals": false,  // Do not report errors on unused locals
+    "noUnusedParameters": false,  // Do not report errors on unused parameters
+    "noFallthroughCasesInSwitch": false,  // Allow fall through case in switch statement
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
