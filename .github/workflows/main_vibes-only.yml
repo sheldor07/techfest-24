@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy Node.js app to Azure Web App - Vibes-only
 
 on:
@@ -10,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,51 +18,71 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: npm install, build, and test
+      - name: Build frontend
         run: |
+          cd royalty-free-music-generator
           npm install
           npm run build --if-present
-          npm run test --if-present
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+      - name: Zip frontend build for deployment
+        run: zip -r frontend-build.zip ./royalty-free-music-generator/build
 
-      - name: Upload artifact for deployment job
+      - name: Upload frontend build artifact for deployment
         uses: actions/upload-artifact@v3
         with:
-          name: node-app
-          path: release.zip
+          name: frontend-build
+          path: frontend-build.zip
+
+      - name: Start Node.js server
+        run: |
+          cd server
+          node index.js &
+
+      - name: Zip server for deployment
+        run: zip -r server.zip ./server
+
+      - name: Upload server artifact for deployment
+        uses: actions/upload-artifact@v3
+        with:
+          name: node-server
+          path: server.zip
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-and-deploy
     environment:
-      name: 'Production'
+      name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
 
     steps:
-      - name: Download artifact from build job
+      - name: Download frontend build artifact
         uses: actions/download-artifact@v3
         with:
-          name: node-app
+          name: frontend-build
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
+      - name: Download server artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: node-server
+
+      - name: Unzip artifacts for deployment
+        run: |
+          unzip frontend-build.zip
+          unzip server.zip
       
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5CA3DB625FC9429BB56CC91CCAEB7A95 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_EABAD21300184AB48B8900DEA7E0B9A4 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_65AC1F59133E4AE5A7938D47CEAEAD98 }}
+          client-id: ${{ secrets.__clientidsecretname__ }}
+          tenant-id: ${{ secrets.__tenantidsecretname__ }}
+          subscription-id: ${{ secrets.__subscriptionidsecretname__ }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'Vibes-only'
-          slot-name: 'Production'
+          slot-name: 'production'
           package: .
-          
