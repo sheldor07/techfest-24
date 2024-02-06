@@ -1,6 +1,7 @@
 import { Outlet, Link, redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import linkjson from "../jsondata/link.json";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,7 +40,7 @@ const Dashboard = () => {
       token: localStorage.getItem("authToken"),
     };
 
-    const response = await fetch("http://localhost:3001/techfest-signout", {
+    const response = await fetch(linkjson.link+"/techfest-signout", {
       method: "POST",
       headers: {
         "x-api-key": "SUsY4RKu6h4AGCiYA2BLs9YHxxThZyQv6YawpI6l",

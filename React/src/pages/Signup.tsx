@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import linkjson from "../jsondata/link.json";
 import { Input } from "@/components/ui/input";
 import toast, { Toaster } from "react-hot-toast";
 // Define the form schema using Zod
@@ -62,7 +63,7 @@ const Signup = () => {
     // console.log(values);
     // // Handle form submission here
     // // send a request to teh server
-    const response = await fetch("http://localhost:3001/techfest_signup", {
+    const response = await fetch(linkjson + "/techfest_signup", {
       method: "POST",
       headers: {
         "x-api-key": "2RttSEJUCC4f3s9K4FO8A2LQhcxzcyZy8ENOzYEV",

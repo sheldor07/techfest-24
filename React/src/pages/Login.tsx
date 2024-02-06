@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import linkjson from "../jsondata/link.json";
 import {
   Form,
   FormControl,
@@ -45,7 +46,7 @@ const Login = () => {
   // Submit handler
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    const response = await fetch("http://localhost:3001/techfest_sign_in", {
+    const response = await fetch(linkjson.link +  "/techfest_sign_in", {
       method: "POST",
       headers: {
         "x-api-key": "2RttSEJUCC4f3s9K4FO8A2LQhcxzcyZy8ENOzYEV",
