@@ -25,7 +25,7 @@ jobs:
           npm run build 
 
       - name: Zip frontend build for deployment
-        run: zip -r frontend-build.zip ./client/build
+        run: zip -r frontend-build.zip ./client/dist
 
       - name: Upload frontend build artifact for deployment
         uses: actions/upload-artifact@v3
